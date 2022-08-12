@@ -1,26 +1,23 @@
 const request = require('request');
-const API_END_POINT = require('./constants');
+const { API_END_POINT } = require('./constants');
 
-const breed = process.argv[2];
-
-const fetchBreed = (breed) => {
+const fetchBreedDescription = (breed, callback) => {
   request(API_END_POINT + `?q=${breed}`, (err, res, body) => {
     if (err) {
-      console.log(err);
+      callback(err, null);
       return;
     }
     if (res.statusCode !== 200) {
-      console.log(`Something goes wrong! statusCode: ${res.statusCode}, message: ${res.statusMessage}`);
+      callback(`Something goes wrong! statusCode: ${res.statusCode}, message: ${res.statusMessage}`, null);
       return;
     }
     const data = JSON.parse(body);
     if (data.length === 0) {
-      console.log(`Breed ${breed} is not found!`);
+      callback(`Breed ${breed} is not found!`, null);
       return;
     }
-    console.log(data[0].description);
-    return data[0].description;
+    callback(null, data[0].description);
   });
 };
 
-fetchBreed(breed);
+module.exports = { fetchBreedDescription };
