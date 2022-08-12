@@ -19,6 +19,7 @@ const fetchBreed = (breed) => {
       return;
     }
     console.log(data[0].description);
+    return data[0].description;
   });
 };
 
